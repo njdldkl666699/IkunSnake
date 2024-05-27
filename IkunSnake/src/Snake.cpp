@@ -45,6 +45,7 @@ State Snake::play(Food& egg, Food& resin)
 	State hitBdy = isHitBody();
 	if (hitBdy == hitBody)
 		return hitBody;
+
 	//³Ô¶«Î÷¼ì²â
 	State ateEgg = isAteFood(egg);
 	State ateResin = isAteFood(resin);
