@@ -15,6 +15,8 @@ private:
 
 	void refresh();
 
+	void getMouseClick();
+
 	void gameStart();
 
 	void gamePlay();
@@ -26,5 +28,8 @@ private:
 private:
 	GameBoard gameboard;
 	Timer timer;
+	ExMessage mouse;
+	std::thread mouseThread;
 	bool isLost;
+	bool isMsTrdEnd;
 };

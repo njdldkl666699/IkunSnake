@@ -48,6 +48,6 @@ void GameBoard::draw()
 	snake.draw();
 	egg.draw();
 	resin.draw();
-	RECT scoreRct = { widgetLength * 3 / 4, widgetLength / 4 - 48, widgetLength, widgetLength / 2 };
+	RECT scoreRct = { widgetWidth * 3 / 4, widgetWidth / 4 - 48, widgetWidth, widgetWidth / 2 };
 	drawSetText(std::to_string(getScore()), &scoreRct, 48, _T("свт╡"), BLACK, FW_DONTCARE);
 }

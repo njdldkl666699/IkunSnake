@@ -6,18 +6,22 @@ auto playSpeed = 300ms;
 const size_t winScore = 100;
 
 UISystem::UISystem()
+	:isLost(false), isMsTrdEnd(false),
+	mouseThread(&UISystem::getMouseClick, this)
 {
 #ifdef _DEBUG
-	initgraph(widgetLength, widgetHeight, EX_SHOWCONSOLE);
+	initgraph(widgetWidth, widgetHeight, EX_SHOWCONSOLE);
 #else // RELEASE
 	initgraph(widgetLength, widgetHeight);
 #endif
+	mouseThread.detach();
 	BeginBatchDraw();
 	gameStart();
 	timer.start();
 	gamePlay();
 	timer.stop();
 	gameOver();
+	isMsTrdEnd = true;
 }
 
 UISystem::~UISystem()
@@ -35,7 +39,7 @@ void UISystem::drawSystem()
 	for (int j = 0; j <= yNum; j++)
 		line(xBegPos, yBegPos + j * blockLength, xEndPos, yBegPos + j * blockLength);
 
-	RECT tagRct = { widgetLength * 3 / 4,widgetHeight / 4 + 28, widgetLength, widgetHeight / 4 + 56 };
+	RECT tagRct = { widgetWidth * 3 / 4,widgetHeight / 4 + 28, widgetWidth, widgetHeight / 4 + 56 };
 	drawSetText("得分", &tagRct, 28, _T("幼圆"), BLACK, FW_BOLD);
 	drawTips();
 }
@@ -43,23 +47,34 @@ void UISystem::drawSystem()
 void UISystem::refresh()
 {
 	cleardevice();
-	loadimage(NULL, _T(".\\res\\playbk.jpg"));
+	loadimage(NULL, _T(".\\res\\playbk.jpg"), widgetWidth, widgetHeight);
 	drawSystem();
 	gameboard.draw();
 	FlushBatchDraw();
 	//Sleep(playSpeed);
 }
 
+void UISystem::getMouseClick()
+{
+	static ExMessage mouseEvent;
+	while (!isMsTrdEnd)
+	{
+		mouseEvent = getmessage(EX_MOUSE);
+		if (mouseEvent.message == WM_LBUTTONDOWN)
+			mouse = mouseEvent;
+	}
+}
+
 void UISystem::gameStart()
 {
-	loadimage(NULL, _T(".\\res\\bk.jpg"));
+	loadimage(NULL, _T(".\\res\\bk.jpg"), widgetWidth, widgetHeight);
 	IMAGE img;
 	loadimage(&img, _T(".\\res\\gamestart.jpg"), 256, 256);
-	putimage(widgetLength / 2 - 128, widgetHeight / 2 - 160, &img);
+	putimage(widgetWidth / 2 - 128, widgetHeight / 2 - 160, &img);
 
-	RECT chRct = { 0, widgetHeight / 2 + 128, widgetLength, widgetHeight / 2 + 128 + 28 };
+	RECT chRct = { 0, widgetHeight / 2 + 128, widgetWidth, widgetHeight / 2 + 128 + 28 };
 	drawSetText("按任意键开始", &chRct, 28, _T("幼圆"), DARKGRAY, FW_BOLD);
-	RECT enRct = { 0,widgetHeight / 2 + 128 + 40,widgetLength,widgetLength / 2 + 128 + 64 };
+	RECT enRct = { 0,widgetHeight / 2 + 128 + 40,widgetWidth,widgetWidth / 2 + 128 + 64 };
 	drawSetText("Press Any Key To Start", &enRct, 26, _T("等线"), LIGHTGRAY, FW_DONTCARE);
 
 	FlushBatchDraw();
@@ -72,7 +87,6 @@ void UISystem::gameStart()
 		system(".\\res\\README.txt");
 	}
 	(void)_getch();
-	this->isLost = false;
 
 	//播放音乐
 	mciSendString(_T("open .\\res\\bgm.mp3 alias bgm"), 0, 0, 0);
@@ -116,12 +130,12 @@ void UISystem::gameOver()
 	cleardevice();
 	loadimage(NULL, _T(".\\res\\bk.jpg"));
 
-	RECT textRct = { 0,widgetHeight / 8,widgetLength,widgetHeight / 2 };
+	RECT textRct = { 0,widgetHeight / 8,widgetWidth,widgetHeight / 2 };
 	std::string text = "游戏结束！\n您的得分为：" + std::to_string(gameboard.getScore())
 		+ "分\n游玩时间：" + std::to_string((int)this->timer.duration()) + "秒";
 	drawSetText(text, &textRct, 60, _T("幼圆"), BLACK, FW_DONTCARE);
 
-	RECT rankRct = { 0,widgetHeight / 2 + 24 ,widgetLength,widgetHeight * 3 / 4 + 24 };
+	RECT rankRct = { 0,widgetHeight / 2 + 24 ,widgetWidth,widgetHeight * 3 / 4 + 24 };
 	const int maxScore = xNum * yNum - 2;
 	IMAGE img;
 	if (gameboard.getScore() < winScore)
@@ -139,13 +153,13 @@ void UISystem::gameOver()
 		if (gameboard.getScore() == maxScore)
 			system(".\\res\\鸡你太美.mp4");
 	}
-	putimage(widgetLength - 280, widgetHeight - 360, &img);
+	putimage(widgetWidth - 280, widgetHeight - 360, &img);
 	FlushBatchDraw();
 }
 
 void UISystem::drawTips()
 {
-	RECT tipRct = { widgetLength * 2 / 3 - 80,widgetHeight / 2 + 80, widgetLength - 80, widgetHeight * 3 / 4 };
+	RECT tipRct = { widgetWidth * 2 / 3 - 80,widgetHeight / 2 + 80, widgetWidth - 80, widgetHeight * 3 / 4 };
 	std::string tip;
 	switch (gameboard.getScore())
 	{

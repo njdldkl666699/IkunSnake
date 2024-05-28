@@ -18,10 +18,10 @@
 #include <iostream>
 #endif // _DEBUG
 
-const int widgetLength = 1024, widgetHeight = 576;
+const int widgetWidth = 1024, widgetHeight = 576;
 const int blockLength = 30;
 const int xBegPos = 20, yBegPos = 20;
-const int xNum = (widgetLength - 2 * xBegPos) / blockLength - 13;
+const int xNum = (widgetWidth - 2 * xBegPos) / blockLength - 13;
 const int yNum = (widgetHeight - 2 * yBegPos) / blockLength;
 const int xEndPos = xBegPos + xNum * blockLength;
 const int yEndPos = yBegPos + yNum * blockLength;
