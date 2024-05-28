@@ -1,5 +1,10 @@
 #include"UISystem.h"
 
+using namespace std::chrono_literals;
+//const int playSpeed = 300;
+auto playSpeed = 300ms;
+const size_t winScore = 100;
+
 UISystem::UISystem()
 {
 #ifdef _DEBUG
@@ -42,7 +47,7 @@ void UISystem::refresh()
 	drawSystem();
 	gameboard.draw();
 	FlushBatchDraw();
-	Sleep(playSpeed);
+	//Sleep(playSpeed);
 }
 
 void UISystem::gameStart()
@@ -80,6 +85,7 @@ void UISystem::gamePlay()
 	while (!isLost)
 	{
 		refresh();
+		std::this_thread::sleep_for(playSpeed);
 		if (_kbhit())
 		{
 			bool isPause = gameboard.rotate(_getch());
@@ -90,6 +96,11 @@ void UISystem::gamePlay()
 				timer.restore();
 			}
 		}
+		if (GetAsyncKeyState('J') & 0x8000)
+			playSpeed = 150ms;
+		else
+			playSpeed = 300ms;
+
 		isLost = gameboard.autoPlay();
 	}
 	return;

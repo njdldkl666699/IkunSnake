@@ -8,7 +8,7 @@ class Snake
 public:
 	enum Direction
 	{
-		Up, Left, Down, Right
+		Up, Left, Down, Right, None
 	};
 
 	enum State

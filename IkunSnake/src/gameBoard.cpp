@@ -16,11 +16,11 @@ bool GameBoard::rotate(char input)
 	case 'w':
 		dir = Dir::Up;
 		break;
-	case 'a':
-		dir = Dir::Left;
-		break;
 	case 's':
 		dir = Dir::Down;
+		break;
+	case 'a':
+		dir = Dir::Left;
 		break;
 	case 'd':
 		dir = Dir::Right;
@@ -28,6 +28,7 @@ bool GameBoard::rotate(char input)
 	case 'p':
 		return true;
 	default:
+		dir = Dir::None;
 		break;
 	}
 	snake.setDirection(dir);
@@ -47,7 +48,6 @@ void GameBoard::draw()
 	snake.draw();
 	egg.draw();
 	resin.draw();
-	score = snake.getData().size();
 	RECT scoreRct = { widgetLength * 3 / 4, widgetLength / 4 - 48, widgetLength, widgetLength / 2 };
-	drawSetText(std::to_string(score), &scoreRct, 48, _T("свт╡"), BLACK, FW_DONTCARE);
+	drawSetText(std::to_string(getScore()), &scoreRct, 48, _T("свт╡"), BLACK, FW_DONTCARE);
 }

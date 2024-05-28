@@ -20,7 +20,7 @@ void Food::setPos(const std::vector<Point>& data, Food* other)
 		isCoincident = false;
 		for (size_t i = 1; i < data.size(); i++)
 		{
-			if (*this == data[i])
+			if (xPos == data[i].x && yPos == data[i].y)
 			{
 				isCoincident = true;
 				break;

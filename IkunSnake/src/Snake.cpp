@@ -26,7 +26,8 @@ void Snake::draw()
 
 void Snake::setDirection(Direction dir)
 {
-	if (dir != direction && dir != direction - 2 && dir != direction + 2)
+	if (dir != None && dir != direction 
+		&& dir != direction - 2 && dir != direction + 2)
 	{
 		direction = dir;
 #ifdef _DEBUG

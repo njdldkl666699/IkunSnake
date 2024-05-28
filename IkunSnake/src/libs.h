@@ -26,8 +26,6 @@ const int yNum = (widgetHeight - 2 * yBegPos) / blockLength;
 const int xEndPos = xBegPos + xNum * blockLength;
 const int yEndPos = yBegPos + yNum * blockLength;
 const double PI = 3.14159265359;
-const int playSpeed = 300;
-const int winScore = 100;
 
 void putimagePNG(int picture_x, int picture_y, IMAGE* picture);
 
