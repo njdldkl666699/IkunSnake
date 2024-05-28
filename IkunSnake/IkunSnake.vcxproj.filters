@@ -111,11 +111,15 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="res\bgm.mp3" />
     <Media Include="res\ngm.wav">
       <Filter>资源文件</Filter>
     </Media>
-    <Media Include="res\鸡你太美.mp4" />
+    <Media Include="res\bgm.mp3">
+      <Filter>资源文件</Filter>
+    </Media>
+    <Media Include="res\鸡你太美.mp4">
+      <Filter>资源文件</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\README.txt" />
