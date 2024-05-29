@@ -3,9 +3,11 @@
 using namespace std::chrono_literals;
 using std::this_thread::sleep_for;
 
-auto playSpeed = 300ms;
+const auto defaultSpeed = 300ms;
+const auto acceleSpeed = 150ms;
 const auto flushSpeed = 10ms;
 const auto gameOverWait = 1s;
+auto playSpeed = 300ms;
 
 const size_t winScore = 100;
 
@@ -16,7 +18,7 @@ UISystem::UISystem()
 #ifdef _DEBUG
 	initgraph(widgetWidth, widgetHeight, EX_SHOWCONSOLE);
 #else // RELEASE
-	initgraph(widgetLength, widgetHeight);
+	initgraph(widgetWidth, widgetHeight);
 #endif
 	mouseThread.detach();
 	BeginBatchDraw();
@@ -68,13 +70,18 @@ void UISystem::getMouseClick()
 	{
 		mouseEvent = getmessage(EX_MOUSE);
 		if (mouseEvent.message == WM_LBUTTONDOWN)
+		{
 			mouse = mouseEvent;
+#ifdef _DEBUG
+			std::cout << "x: " << mouse.x << " y: " << mouse.y << std::endl;
+#endif // _DEBUG
+		}
 	}
 }
 
 bool UISystem::gameStart()
 {
-	while (true)
+	while (!isMsTrdEnd)
 	{
 		loadimage(NULL, _T(".\\res\\gamemenu.png"), widgetWidth, widgetHeight);
 		FlushBatchDraw();
@@ -93,7 +100,7 @@ bool UISystem::gameStart()
 				mouse.message = WM_MOUSEMOVE;
 				loadimage(NULL, _T(".\\res\\gamerule.png"), widgetWidth, widgetHeight);
 				FlushBatchDraw();
-				while (true)
+				while (!isMsTrdEnd)
 				{
 					//Back Button 408,473;618,547
 					if (mouse.x > 408 && mouse.x < 618 && mouse.y > 473 && mouse.y < 547 
@@ -138,9 +145,9 @@ void UISystem::gamePlay()
 			}
 		}
 		if (GetAsyncKeyState('J') & 0x8000)
-			playSpeed = 150ms;
+			playSpeed = acceleSpeed;
 		else
-			playSpeed = 300ms;
+			playSpeed = defaultSpeed;
 
 		isLost = gameboard.autoPlay();
 	}
@@ -180,7 +187,7 @@ void UISystem::gameOver()
 	drawSetText(text, &textRct, 60, _T("свт╡"), BLACK, FW_DONTCARE);
 
 	FlushBatchDraw();
-	while (true)
+	while (!isMsTrdEnd)
 	{
 		//Back Button 408,473;620,550
 		if (mouse.x > 408 && mouse.x < 620 && mouse.y > 473 && mouse.y < 550
