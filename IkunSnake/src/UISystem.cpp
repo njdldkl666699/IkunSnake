@@ -1,8 +1,10 @@
 #include"UISystem.h"
 
 using namespace std::chrono_literals;
+using std::this_thread::sleep_for;
 //const int playSpeed = 300;
 auto playSpeed = 300ms;
+const auto flushSpeed = 10ms;
 const size_t winScore = 100;
 
 UISystem::UISystem()
@@ -32,7 +34,6 @@ UISystem::UISystem()
 UISystem::~UISystem()
 {
 	EndBatchDraw();
-	(void)_getch();
 	closegraph();
 }
 
@@ -77,31 +78,40 @@ bool UISystem::gameStart()
 		loadimage(NULL, _T(".\\res\\gamemenu.png"), widgetWidth, widgetHeight);
 		FlushBatchDraw();
 
-		if (mouse.x > 235 && mouse.x < 475&&mouse.message==WM_LBUTTONDOWN)
+		if (mouse.x > 235 && mouse.x < 475)
 		{
-			mouse.message = WM_MOUSEMOVE;
 			//GameStart Button 235,175;475,260
-			if (mouse.y > 175 && mouse.y < 260)
+			if (mouse.y > 175 && mouse.y < 260 && mouse.message == WM_LBUTTONDOWN)
 			{
+				mouse.message = WM_MOUSEMOVE;
 				break;
 			}
 			//GameRule Button 235,300;475,385
-			if (mouse.y > 300 && mouse.y < 385)
+			if (mouse.y > 300 && mouse.y < 385 && mouse.message == WM_LBUTTONDOWN)
 			{
+				mouse.message = WM_MOUSEMOVE;
 				loadimage(NULL, _T(".\\res\\gamerule.png"), widgetWidth, widgetHeight);
 				FlushBatchDraw();
 				while (true)
 				{
-					//Back Button 
-					
+					//Back Button 408,473;618,547
+					if (mouse.x > 408 && mouse.x < 618 && mouse.y > 473 && mouse.y < 547 
+						&& mouse.message == WM_LBUTTONDOWN)
+					{
+						mouse.message = WM_MOUSEMOVE;
+						break;
+					}
+					sleep_for(flushSpeed);
 				}
 			}
 			//GameExit Button 235,425;475,510
-			if (mouse.y > 425 && mouse.y < 510)
+			if (mouse.y > 425 && mouse.y < 510 && mouse.message == WM_LBUTTONDOWN)
 			{
+				mouse.message = WM_MOUSEMOVE;
 				return true;
 			}
 		}
+		sleep_for(flushSpeed);
 	}
 
 	//²¥·ÅÒôÀÖ
