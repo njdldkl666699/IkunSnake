@@ -17,7 +17,7 @@ private:
 
 	void getMouseClick();
 
-	void gameStart();
+	bool gameStart();
 
 	void gamePlay();
 

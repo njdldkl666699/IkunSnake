@@ -16,11 +16,16 @@ UISystem::UISystem()
 #endif
 	mouseThread.detach();
 	BeginBatchDraw();
-	gameStart();
-	timer.start();
-	gamePlay();
-	timer.stop();
-	gameOver();
+	while(true)
+	{
+		bool isExit = gameStart();
+		if (isExit)
+			break;
+		timer.start();
+		gamePlay();
+		timer.stop();
+		gameOver();
+	}
 	isMsTrdEnd = true;
 }
 
@@ -65,37 +70,49 @@ void UISystem::getMouseClick()
 	}
 }
 
-void UISystem::gameStart()
+bool UISystem::gameStart()
 {
-	loadimage(NULL, _T(".\\res\\bk.jpg"), widgetWidth, widgetHeight);
-	IMAGE img;
-	loadimage(&img, _T(".\\res\\gamestart.jpg"), 256, 256);
-	putimage(widgetWidth / 2 - 128, widgetHeight / 2 - 160, &img);
-
-	RECT chRct = { 0, widgetHeight / 2 + 128, widgetWidth, widgetHeight / 2 + 128 + 28 };
-	drawSetText("按任意键开始", &chRct, 28, _T("幼圆"), DARKGRAY, FW_BOLD);
-	RECT enRct = { 0,widgetHeight / 2 + 128 + 40,widgetWidth,widgetWidth / 2 + 128 + 64 };
-	drawSetText("Press Any Key To Start", &enRct, 26, _T("等线"), LIGHTGRAY, FW_DONTCARE);
-
-	FlushBatchDraw();
-	std::fstream fs(".\\firstrun", std::ios::in | std::ios::binary);
-	if (!fs.is_open())
+	while (true)
 	{
-		fs.open(".\\firstrun", std::ios::out | std::ios::binary);
-		fs.write("你好，小黑子！", 22);
-		fs.close();
-		system(".\\res\\README.txt");
+		loadimage(NULL, _T(".\\res\\gamemenu.png"), widgetWidth, widgetHeight);
+		FlushBatchDraw();
+
+		if (mouse.x > 235 && mouse.x < 475&&mouse.message==WM_LBUTTONDOWN)
+		{
+			mouse.message = WM_MOUSEMOVE;
+			//GameStart Button 235,175;475,260
+			if (mouse.y > 175 && mouse.y < 260)
+			{
+				break;
+			}
+			//GameRule Button 235,300;475,385
+			if (mouse.y > 300 && mouse.y < 385)
+			{
+				loadimage(NULL, _T(".\\res\\gamerule.png"), widgetWidth, widgetHeight);
+				FlushBatchDraw();
+				while (true)
+				{
+					//Back Button 
+					
+				}
+			}
+			//GameExit Button 235,425;475,510
+			if (mouse.y > 425 && mouse.y < 510)
+			{
+				return true;
+			}
+		}
 	}
-	(void)_getch();
 
 	//播放音乐
 	mciSendString(_T("open .\\res\\bgm.mp3 alias bgm"), 0, 0, 0);
 	mciSendString(_T("play bgm repeat"), 0, 0, 0);
-	//mciSendString(_T("repeat bgm"), 0, 0, 0);
+	return false;
 }
 
 void UISystem::gamePlay()
 {
+	//gameboard = GameBoard();
 	while (!isLost)
 	{
 		refresh();
@@ -117,7 +134,6 @@ void UISystem::gamePlay()
 
 		isLost = gameboard.autoPlay();
 	}
-	return;
 }
 
 void UISystem::gameOver()
