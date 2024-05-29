@@ -23,7 +23,7 @@ private:
 
 	void gameOver();
 
-	void drawTips();
+	void drawTips() const;
 
 private:
 	GameBoard gameboard;

@@ -4,6 +4,7 @@ Timer::Timer() :dura(0.0) {};
 
 void Timer::start()
 {
+	dura = 0.0;
 	stampBeg = clock::now();
 }
 

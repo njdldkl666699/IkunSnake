@@ -13,7 +13,7 @@ public:
 
 	enum State
 	{
-		hitBorder, hitBody, ateFood, normal
+		hitBorder, died, ateFood, normal
 	};
 
 	Snake();
@@ -43,7 +43,7 @@ private:
 	State isHitBody();
 
 	//³Ô¶«Î÷¼ì²â
-	State isAteFood(Food& food);
+	State isAteFood(const Food& food);
 
 #ifdef _DEBUG
 	void consolePrintSnake();

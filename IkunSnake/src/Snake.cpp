@@ -38,20 +38,28 @@ void Snake::setDirection(Direction dir)
 
 State Snake::play(Food& egg, Food& resin)
 {
+	if(data.empty())
+		return died;
+	headPos = &data.at(0);
 	//自动移动
 	move();
 	//边界检测
 	State hitBdr = isHitBorder();
 	//撞身体检测
 	State hitBdy = isHitBody();
-	if (hitBdy == hitBody)
-		return hitBody;
+	if (hitBdy == died)
+		return died;
 
 	//吃东西检测
 	State ateEgg = isAteFood(egg);
+	if (ateEgg == ateFood)
+		egg.setPos(data, &resin);
 	State ateResin = isAteFood(resin);
+	if (ateResin == ateFood)
+		resin.setPos(data, &egg);
 	if (ateEgg == ateFood || ateResin == ateFood)
 		return ateFood;
+
 	return normal;
 }
 
@@ -130,26 +138,22 @@ State Snake::isHitBody()
 {
 	for (size_t i = 1; i < data.size(); i++)
 		if (*this->headPos == this->data[i])
-			return State::hitBody;
+			return State::died;
 	return State::normal;
 }
 
 //吃东西检测
-State Snake::isAteFood(Food& food)
+State Snake::isAteFood(const Food& food)
 {
 	int rlt = food.isAte(headPos);
 	if (rlt > 0)
 	{
 		data.push_back(endPos);
-		headPos = &data.at(0);
-		food.setPos(data);
 		return State::ateFood;
 	}
 	else if (rlt < 0 && !data.empty())
 	{
 		data.pop_back();
-		headPos = &data.at(0);
-		food.setPos(data);
 		return State::ateFood;
 	}
 	return State::normal;

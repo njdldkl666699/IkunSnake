@@ -38,7 +38,7 @@ bool GameBoard::rotate(char input)
 bool GameBoard::autoPlay()
 {
 	Snake::State state = snake.play(egg, resin);
-	if (state == Snake::State::hitBody)
+	if (state == Snake::State::died)
 		return true;
 	return false;
 }

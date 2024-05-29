@@ -2,9 +2,11 @@
 
 using namespace std::chrono_literals;
 using std::this_thread::sleep_for;
-//const int playSpeed = 300;
+
 auto playSpeed = 300ms;
 const auto flushSpeed = 10ms;
+const auto gameOverWait = 1s;
+
 const size_t winScore = 100;
 
 UISystem::UISystem()
@@ -57,7 +59,6 @@ void UISystem::refresh()
 	drawSystem();
 	gameboard.draw();
 	FlushBatchDraw();
-	//Sleep(playSpeed);
 }
 
 void UISystem::getMouseClick()
@@ -122,7 +123,6 @@ bool UISystem::gameStart()
 
 void UISystem::gamePlay()
 {
-	//gameboard = GameBoard();
 	while (!isLost)
 	{
 		refresh();
@@ -152,38 +152,52 @@ void UISystem::gameOver()
 	FlushBatchDraw();
 	mciSendString(_T("stop bgm"), 0, 0, 0);
 	PlaySound(_T(".\\res\\ngm.wav"), NULL, SND_FILENAME | SND_ASYNC);
-	(void)_getch();
+	sleep_for(gameOverWait);
+
 	cleardevice();
-	loadimage(NULL, _T(".\\res\\bk.jpg"));
 
-	RECT textRct = { 0,widgetHeight / 8,widgetWidth,widgetHeight / 2 };
-	std::string text = "游戏结束！\n您的得分为：" + std::to_string(gameboard.getScore())
-		+ "分\n游玩时间：" + std::to_string((int)this->timer.duration()) + "秒";
-	drawSetText(text, &textRct, 60, _T("幼圆"), BLACK, FW_DONTCARE);
-
-	RECT rankRct = { 0,widgetHeight / 2 + 24 ,widgetWidth,widgetHeight * 3 / 4 + 24 };
-	const int maxScore = xNum * yNum - 2;
-	IMAGE img;
+	static const int maxScore = xNum * yNum - 2;
+	IMAGE img(widgetWidth, widgetHeight);
 	if (gameboard.getScore() < winScore)
 	{
 		//fail
-		drawSetText("蔡", &rankRct, 96, _T("幼圆"), RED, FW_BOLD);
-		loadimage(&img, _T(".\\res\\gamefail.jpg"), 240, 320);
+		loadimage(&img, _T(".\\res\\gamefail.png"), widgetWidth, widgetHeight);
 	}
 	else
 	{
 		//win
-		drawSetText("你干嘛 ~ 啊哈 ~ 哎呦 ~ ", &rankRct, 36, _T("幼圆"), BLACK, FW_BOLD);
-		loadimage(&img, _T(".\\res\\gamewin.jpg"), 280, 320);
+		loadimage(&img, _T(".\\res\\gamewin.png"), widgetWidth, widgetHeight);
+
 		//彩蛋
-		if (gameboard.getScore() == maxScore)
+		if (gameboard.getScore() >= maxScore)
 			system(".\\res\\鸡你太美.mp4");
 	}
-	putimage(widgetWidth - 280, widgetHeight - 360, &img);
+	putimage(0, 0, &img);
+
+	RECT textRct = { 0,widgetHeight / 8,widgetWidth,widgetHeight / 2 };
+	std::string text = "游戏结束！\n您的得分为：" + std::to_string(gameboard.getScore())
+		+ " 分\n游玩时间：" + std::to_string((int)this->timer.duration()) + " 秒";
+	drawSetText(text, &textRct, 60, _T("幼圆"), BLACK, FW_DONTCARE);
+
 	FlushBatchDraw();
+	while (true)
+	{
+		//Back Button 408,473;620,550
+		if (mouse.x > 408 && mouse.x < 620 && mouse.y > 473 && mouse.y < 550
+			&& mouse.message == WM_LBUTTONDOWN)
+		{
+			mouse.message = WM_MOUSEMOVE;
+			break;
+		}
+	}
+
+	//reset
+	gameboard = GameBoard();
+	mciSendString(_T("close bgm"), 0, 0, 0);
+	isLost = false;
 }
 
-void UISystem::drawTips()
+void UISystem::drawTips() const
 {
 	RECT tipRct = { widgetWidth * 2 / 3 - 80,widgetHeight / 2 + 80, widgetWidth - 80, widgetHeight * 3 / 4 };
 	std::string tip;

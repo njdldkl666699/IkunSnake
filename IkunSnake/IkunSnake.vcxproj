@@ -153,9 +153,11 @@
     <Image Include="res\basketball.png" />
     <Image Include="res\bk.jpg" />
     <Image Include="res\egg.png" />
-    <Image Include="res\gamefail.jpg" />
+    <Image Include="res\gamefail.png" />
+    <Image Include="res\gamemenu.png" />
+    <Image Include="res\gamerule.png" />
     <Image Include="res\gamestart.jpg" />
-    <Image Include="res\gamewin.jpg" />
+    <Image Include="res\gamewin.png" />
     <Image Include="res\icon.ico" />
     <Image Include="res\ikun.png" />
     <Image Include="res\ikun0.png" />

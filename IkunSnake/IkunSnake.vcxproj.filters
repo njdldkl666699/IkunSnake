@@ -73,13 +73,7 @@
     <Image Include="res\egg.png">
       <Filter>资源文件</Filter>
     </Image>
-    <Image Include="res\gamefail.jpg">
-      <Filter>资源文件</Filter>
-    </Image>
     <Image Include="res\gamestart.jpg">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="res\gamewin.jpg">
       <Filter>资源文件</Filter>
     </Image>
     <Image Include="res\icon.ico">
@@ -107,6 +101,18 @@
       <Filter>资源文件</Filter>
     </Image>
     <Image Include="res\ikun3.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\gamefail.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\gamemenu.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\gamerule.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\gamewin.png">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>
