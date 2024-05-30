@@ -1,10 +1,9 @@
 #pragma once
-#define _CRT_SECURE_NO_WARNINGS
+//#define _CRT_SECURE_NO_WARNINGS
 #include<graphics.h>
 #include<conio.h>
 #include<string>
 #include<vector>
-#include<fstream>
 #include<ctime>
 #include<chrono>
 #include<thread>

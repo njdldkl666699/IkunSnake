@@ -25,4 +25,3 @@ private:
 	stamp stampEnd;
 	double dura;
 };
-

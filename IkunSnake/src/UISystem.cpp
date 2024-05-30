@@ -65,7 +65,7 @@ void UISystem::refresh()
 
 void UISystem::getMouseClick()
 {
-	static ExMessage mouseEvent;
+	ExMessage mouseEvent;
 	while (!isMsTrdEnd)
 	{
 		mouseEvent = getmessage(EX_MOUSE);
@@ -133,7 +133,7 @@ void UISystem::gamePlay()
 	while (!isLost)
 	{
 		refresh();
-		std::this_thread::sleep_for(playSpeed);
+		sleep_for(playSpeed);
 		if (_kbhit())
 		{
 			bool isPause = gameboard.rotate(_getch());
@@ -196,6 +196,7 @@ void UISystem::gameOver()
 			mouse.message = WM_MOUSEMOVE;
 			break;
 		}
+		sleep_for(flushSpeed);
 	}
 
 	//reset
