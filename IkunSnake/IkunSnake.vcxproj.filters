@@ -128,9 +128,6 @@
     </Media>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="res\README.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="IkunSnake.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
