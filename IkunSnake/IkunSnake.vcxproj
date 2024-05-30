@@ -24,6 +24,7 @@
     <ProjectGuid>{34edc94f-e8c5-45db-be49-9959ed572677}</ProjectGuid>
     <RootNamespace>IkunSnake</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>IkunSnake</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

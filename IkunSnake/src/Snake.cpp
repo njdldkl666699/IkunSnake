@@ -40,7 +40,7 @@ State Snake::play(Food& egg, Food& resin)
 {
 	if(data.empty())
 		return died;
-	headPos = &data.at(0);
+
 	//自动移动
 	move();
 	//边界检测
@@ -57,6 +57,7 @@ State Snake::play(Food& egg, Food& resin)
 	State ateResin = isAteFood(resin);
 	if (ateResin == ateFood)
 		resin.setPos(data, &egg);
+	headPos = &data.at(0);
 	if (ateEgg == ateFood || ateResin == ateFood)
 		return ateFood;
 
