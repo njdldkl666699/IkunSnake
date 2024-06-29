@@ -57,7 +57,8 @@ State Snake::play(Food& egg, Food& resin)
 	State ateResin = isAteFood(resin);
 	if (ateResin == ateFood)
 		resin.setPos(data, &egg);
-	headPos = &data.at(0);
+	if(!data.empty())
+		headPos = &data.at(0);
 	if (ateEgg == ateFood || ateResin == ateFood)
 		return ateFood;
 
